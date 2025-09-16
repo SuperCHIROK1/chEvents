@@ -1,0 +1,61 @@
+package me.superchirok1.chevents.utils;
+
+import me.clip.placeholderapi.PlaceholderAPI;
+import me.superchirok1.chevents.ChEvents;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Utils {
+
+    public static ChEvents plugin;
+
+    public Utils(ChEvents plugin) {
+        this.plugin = plugin;
+    }
+
+    public static String format(Player player, String message) {
+        if (message == null) return "";
+
+        if (player != null && Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            message = PlaceholderAPI.setPlaceholders(player, message);
+        }
+
+        String prefix = plugin.getConfig().getString("messages.prefix");
+        message = message.replace("{PRFX}", prefix);
+
+        final Pattern hexPattern = Pattern.compile("&#([A-Fa-f0-9]{6})");
+        Matcher matcher = hexPattern.matcher(message);
+        StringBuffer buffer = new StringBuffer();
+        while (matcher.find()) {
+            String hex = matcher.group(1);
+            matcher.appendReplacement(buffer, ChatColor.of("#" + hex).toString());
+        }
+        matcher.appendTail(buffer);
+        message = buffer.toString();
+
+        return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
+    public static String format(String message) {
+        return format(null, message);
+    }
+
+    public static void send(Player player, String message) {
+        player.sendMessage(format(player, message));
+    }
+
+    public static void send(CommandSender sender, String message) {
+        sender.sendMessage(format(null, message));
+    }
+
+    public static List<String> formatList(Player player, List<String> list) {
+        if (list == null) return List.of();
+        return list.stream().map(line -> format(player, line)).toList();
+    }
+}

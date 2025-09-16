@@ -1,0 +1,144 @@
+#  ██████╗██╗  ██╗███████╗██╗   ██╗███████╗███╗   ██╗████████╗███████╗
+# ██╔════╝██║  ██║██╔════╝██║   ██║██╔════╝████╗  ██║╚══██╔══╝██╔════╝
+# ██║     ███████║█████╗  ██║   ██║█████╗  ██╔██╗ ██║   ██║   ███████╗
+# ██║     ██╔══██║██╔══╝  ╚██╗ ██╔╝██╔══╝  ██║╚██╗██║   ██║   ╚════██║
+# ╚██████╗██║  ██║███████╗ ╚████╔╝ ███████╗██║ ╚████║   ██║   ███████║
+#  ╚═════╝╚═╝  ╚═╝╚══════╝  ╚═══╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝
+
+# SuperCHIROK1 (t.me/bordyer)
+# Плагин поддерживает HEX и LEGACY цвета, а также PlaceholderAPI
+
+# ==============================
+#   ДАННАЯ КОНФИГУРАЦИЯ СТАРАЯ
+#   ОНА СЕЙЧАС НИГДЕ НЕ ИСПОЛЬЗУЕТСЯ
+# ==============================
+
+messages:
+  prefix: "&#FF3400[&#FF3C00c&#FF4400h&#FF4C00E&#FF5400v&#FF5C00e&#FF6400n&#FF6C00t&#FF7400s&#FF7C00]&f"
+  reloaded: "{PRFX} &#6ffc03Перезагрузка успешна"
+  no-perms: "{PRFX} &cУ вас не хватает полномочий, чтобы совершить данное действие"
+  usage: "{PRFX} Использование команды: &#FF7C00{cmd}"
+  dont-have: "{PRFX} Такого события нет в events"
+  player-only: "{PRFX} &cТолько игроки могут делать так"
+  player-not-found: "{PRFX} &cИгрок не найден или оффлайн"
+  event-executed: "{PRFX} &fСобытие выполнено для &#FF7C00{target}"
+  list-title: "{PRFX} Список слушателей:"
+  list: "&7 - &f{name} &8({event})"
+  placeholders:
+    no-listener: "Нет слушателя"
+
+# ========================================
+#
+# "!" работает только при permission (!essentials.fly)
+#
+# events:
+#   <название>:
+#      enabled: true
+#      event: <join, quit, move, death, damage, bed_enter, bed_leave, level_change, kill, chat_message>
+#      actions-target: <EVENT_PLAYER, ONLINE_PLAYERS>
+#      cancel-event: <true/false> (работает только при выполнении условий *conditions*, т.е. actions будут работать)
+#      full-cancel-event: <true/false> (работает всегда и полностью отменяет ивент и действия)
+#      conditions:
+#        world: <мир>
+#        permission: <право>
+#        chance: <шанс>
+#        time: <от>-<до>
+#        name: <имя-игрока>
+#        message: <сообщение> (работает только при chat_message)
+#        has:
+#          vault: <кол-во>
+#          playerpoints: <кол-во>
+#          item: <материал>
+#        vars:
+#          <название>:
+#            input: <ввод>
+#            output: <вывод>
+#      actions: <действия>
+#      deny-actions: <действия>
+# ========================================
+
+events:
+  join:
+    enabled: true
+    event: join
+    conditions:
+      permission: "!join.donate" # "!" работает только при permission (!essentials.fly)
+    actions:
+      - "[title] &#ff4000&l%name%|&7Добро пожаловать|10|40|10"
+      - '[broadcast] &#ff4000&l[+] &7Игрок &f%name% &7зашел!'
+      - '[actionbar] &#ff4000&lПриятной игры'
+      - '[sound] entity.wither.spawn|1|1'
+  join_donator:
+    enabled: true
+    event: join
+    conditions:
+      permission: join.donate
+    actions:
+      - "[title] &#ff4000&l%name%|&eДобро пожаловать|10|40|10"
+      - '[broadcast] &#ff4000&l[+] &7Игрок &e[Элита] %name% &7зашел!'
+      - '[actionbar] &#ff4000&lПриятной игры'
+      - '[sound] entity.wither.spawn|1|1'
+  quit:
+    enabled: true
+    event: quit
+    actions:
+      - '[broadcast] &c&l[-] &7Игрок &f%name% &7вышел'
+  death:
+    enabled: true
+    event: death
+    actions:
+      - '[broadcast] &#ff4000&l[☠] &7Игрок &f%name% &7умер'
+  bed-leave:
+    enabled: true
+    event: bed_leave
+    actions:
+      - '[broadcast] &8* &7%name% встал с кровати'
+  bed-enter:
+    enabled: true
+    event: bed_enter
+    actions:
+      - '[broadcast] &8* &7%name% лег на кровать'
+  damage:
+    enabled: true
+    event: damage
+    actions:
+      - '[actionbar] &fЗдоровье: &c%health%'
+
+  # Это было сделано в виде примера
+  # Не рекомендую использовать, а сделать свой если надо
+  trail:
+    enabled: false
+    event: move
+    actions:
+      - "[particle] %x%|%y%|%z%|SOUL_FIRE_FLAME|10|0.18|1|0.18|0"
+      - "[particle] %x%|%y%|%z%|SOUL_FIRE_FLAME|5|0.25|1|0.25|0"
+
+# ========== Действия: ==========
+# [title] <title>|<subtitle>|<fade-in>|<stay>|<fade-out>
+# [msg] <сообщение>
+# [broadcast] <сообщение>
+# [player] <команда>
+# [console] <команда>
+# [sound] <звук>|<громкость>|<скорость>
+# [actionbar] <сообщение>
+# [tp] <x>|<y>|<z>
+# [particle] <x>|<y>|<z>|<частица>|<кол-во>|<смещение-x>|<смещение-y>|<смещение-z>|<скорость>
+# [effect] <эффект>|<уровень>|<длительность>
+# [kick] <сообщение>
+# [velocity] <значение>
+# [give] <материал>|<кол-во>
+# [take] <материал>|<кол-во>
+# [vault_give] <кол-во>
+# [vault_take] <кол-во>
+# [playerp_give] <кол-во>
+# [playerp_take] <кол-во>
+
+# ========== Плейсхолдеры: ==========
+# %name% - Имя игрока
+# %x% - Координата X игрока
+# %y% - Координата Y игрока
+# %z% - Координата Z игрока
+# %uuid% - UUID игрока
+# %world% - Мир игрока
+# %health% - Здоровье игрока
+# %max_health% - Макс.здоровье игрока

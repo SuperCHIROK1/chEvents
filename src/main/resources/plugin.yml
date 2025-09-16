@@ -1,0 +1,17 @@
+name: chEvents
+version: '${project.version}'
+main: me.superchirok1.chevents.ChEvents
+api-version: '1.16'
+prefix: chEvents
+softdepend: [PlaceholderAPI, Vault, PlayerPoints]
+authors: [SuperCHIROK1]
+description: Действия при событиях
+
+commands:
+  chevents:
+    aliases:
+      - chev
+
+permissions:
+  chevents.admin:
+    description: Права админа

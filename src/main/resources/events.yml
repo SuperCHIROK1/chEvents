@@ -1,0 +1,140 @@
+# ========================================
+#
+# "!" работает только при permission (!essentials.fly)
+#
+# events:
+#   <название>:
+#      enabled: true
+#      event: <join, quit, move, death, damage, bed_enter, bed_leave, level_change, chat_message>
+#      actions-target: <EVENT_PLAYER, ONLINE_PLAYERS>
+#      cancel-event: <true/false> (работает только при выполнении условий *conditions*, т.е. actions будут работать)
+#      full-cancel-event: <true/false> (работает всегда и полностью отменяет ивент и действия)
+#      conditions:
+#        world: <мир>
+#        permission: <право>
+#        chance: <шанс>
+#        time: <от>-<до>
+#        name: <имя-игрока>
+#        message: <сообщение> (работает только при chat_message)
+#        has:
+#          vault: <кол-во>
+#          playerpoints: <кол-во>
+#          item: <материал>
+#        vars:
+#          <название>:
+#            input: <ввод>
+#            output: <вывод>
+#      actions: <действия>
+#      deny-actions: <действия>
+# ========================================
+
+events:
+  join:
+    enabled: true
+    event: join
+    conditions:
+      permission: "!join.donate" # "!" работает только при permission (!essentials.fly)
+    actions:
+      - "[title] &f&l |&8&k-&f &#FF3400д&#FF3900ᴏ&#FF3E00б&#FF4200ᴘ&#FF4700ᴏ &#FF5100п&#FF5600ᴏ&#FF5A00ж&#FF5F00ᴀ&#FF6400л&#FF6900ᴏ&#FF6E00ʙ&#FF7200ᴀ&#FF7700ᴛ&#FF7C00ь &8&k-&f|10|40|10"
+      - '[broadcast] &#ff4000&l[+] &7Игрок &f%name% &7зашел!'
+      - '[sound] entity.wither.spawn|1|1'
+  join_donator:
+    enabled: true
+    event: join
+    conditions:
+      permission: join.donate
+    actions:
+      - "[title] &f&l |&8&k-&f &#FF3400д&#FF3900ᴏ&#FF3E00б&#FF4200ᴘ&#FF4700ᴏ &#FF5100п&#FF5600ᴏ&#FF5A00ж&#FF5F00ᴀ&#FF6400л&#FF6900ᴏ&#FF6E00ʙ&#FF7200ᴀ&#FF7700ᴛ&#FF7C00ь &8&k-&f|10|40|10"
+      - '[broadcast] &#ff4000&l[+] &7Игрок &e[Элита] %name% &7зашел!'
+      - '[sound] entity.wither.spawn|1|1'
+  quit:
+    enabled: true
+    event: quit
+    actions:
+      - '[broadcast] &c&l[-] &7Игрок &f%name% &7вышел'
+  death:
+    enabled: true
+    event: death
+    actions:
+      - '[broadcast] &#ff4000&l[☠] &7Игрок &f%name% &7умер'
+  bed-leave:
+    enabled: true
+    event: bed_leave
+    conditions:
+      chance: 0.25
+    actions:
+      - '[broadcast] &8* &7%name% встал с кровати'
+      - '[give] COOKIE|1'
+      - '[effect] speed|2|200'
+      - '[actionbar] &e&lТы получил печеньку за пробуждение! &6(+ вы сегодня бодрый)'
+    deny-actions:
+      - '[broadcast] &8* &7%name% встал с кровати'
+      - '[give] COOKIE|1'
+      - '[actionbar] &e&lТы получил печеньку за пробуждение!'
+
+  bed-enter:
+    enabled: true
+    event: bed_enter
+    actions:
+      - '[broadcast] &8* &7%name% лег на кровать'
+  damage:
+    enabled: true
+    event: damage
+    actions:
+      - '[actionbar] &fЗдоровье: &c%health%'
+      - '[velocity] 0|0.5|0'
+  anti-poproshaika:
+    enabled: true
+    cancel-event: true
+    event: chat_message
+    conditions:
+      message: "дай ресов"
+    actions:
+      - "[title] &f |&c☺ &#ff3d3d&lʜᴇ пᴘᴏᴄи ᴘᴇᴄуᴘᴄы|0|40|10"
+      - "[sound] block.note_block.didgeridoo|10|1"
+  chat-sound:
+    enabled: false
+    event: chat_message
+    actions-target: ONLINE_PLAYERS
+    actions:
+      - "[sound] entity.item.pickup|10|0.2"
+
+  # Это было сделано в виде примера
+  # Не рекомендую использовать, а сделать свой если надо
+  trail:
+    enabled: false
+    event: move
+    actions:
+      - "[particle] %x%|%y%|%z%|SOUL_FIRE_FLAME|10|0.18|1|0.18|0"
+      - "[particle] %x%|%y%|%z%|SOUL_FIRE_FLAME|5|0.25|1|0.25|0"
+
+
+# ========== Действия: ==========
+# [title] <title>|<subtitle>|<fade-in>|<stay>|<fade-out>
+# [msg] <сообщение>
+# [broadcast] <сообщение>
+# [player] <команда>
+# [console] <команда>
+# [sound] <звук>|<громкость>|<скорость>
+# [actionbar] <сообщение>
+# [tp] <x>|<y>|<z>
+# [particle] <x>|<y>|<z>|<частица>|<кол-во>|<смещение-x>|<смещение-y>|<смещение-z>|<скорость>
+# [effect] <эффект>|<уровень>|<длительность>
+# [kick] <сообщение>
+# [velocity] <значение>
+# [give] <материал>|<кол-во>
+# [take] <материал>|<кол-во>
+# [vault_give] <кол-во>
+# [vault_take] <кол-во>
+# [playerp_give] <кол-во>
+# [playerp_take] <кол-во>
+
+# ========== Плейсхолдеры: ==========
+# %name% - Имя игрока
+# %x% - Координата X игрока
+# %y% - Координата Y игрока
+# %z% - Координата Z игрока
+# %uuid% - UUID игрока
+# %world% - Мир игрока
+# %health% - Здоровье игрока
+# %max_health% - Макс.здоровье игрока
