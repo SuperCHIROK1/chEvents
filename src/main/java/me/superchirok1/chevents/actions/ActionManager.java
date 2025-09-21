@@ -202,9 +202,68 @@ public class ActionManager {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+        } else if (raw.startsWith("[gamemode]")) {
+            String value = raw.replace("[gamemode]", "").trim();
+
+            try {
+                player.setGameMode(GameMode.valueOf(value.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+        } else if (raw.startsWith("[heal]")) {
+            player.setHealth(player.getMaxHealth());
+        } else if (raw.startsWith("[feed]")) {
+            player.setFoodLevel(20);
+            player.setSaturation(20f);
+        } else if (raw.startsWith("[sethealth]")) {
+            String value = raw.replace("[sethealth]", "").trim();
+
+            try {
+                player.setHealth(Integer.parseInt(value));
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+        } else if (raw.startsWith("[setfood]")) {
+            String value = raw.replace("[setfood]", "").trim();
+
+            try {
+                player.setFoodLevel(Integer.parseInt(value));
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+        } else if (raw.startsWith("[xp_give]")) {
+            String value = raw.replace("[xp_give]", "").trim();
+
+            try {
+                player.giveExp(Integer.parseInt(value));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        } else if (raw.startsWith("[xp_take]")) {
+            String value = raw.replace("[xp_take]", "").trim();
+
+            try {
+                player.giveExp(-Integer.parseInt(value));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        } else if (raw.startsWith("[level_give]")) {
+            String value = raw.replace("[level_give]", "").trim();
+
+            try {
+                player.giveExpLevels(Integer.parseInt(value));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        } else if (raw.startsWith("[level_take]")) {
+            String value = raw.replace("[level_take]", "").trim();
+
+            try {
+                player.giveExpLevels(-Integer.parseInt(value));
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
         }
-
-
 
     }
 

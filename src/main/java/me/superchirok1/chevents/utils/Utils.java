@@ -19,6 +19,8 @@ public class Utils {
         this.plugin = plugin;
     }
 
+    private static final Pattern hexPattern = Pattern.compile("&#([A-Fa-f0-9]{6})");
+
     public static String format(Player player, String message) {
         if (message == null) return "";
 
@@ -29,7 +31,6 @@ public class Utils {
         String prefix = plugin.getConfig().getString("messages.prefix");
         message = message.replace("{PRFX}", prefix);
 
-        final Pattern hexPattern = Pattern.compile("&#([A-Fa-f0-9]{6})");
         Matcher matcher = hexPattern.matcher(message);
         StringBuffer buffer = new StringBuffer();
         while (matcher.find()) {

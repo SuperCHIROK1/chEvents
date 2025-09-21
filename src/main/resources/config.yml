@@ -45,6 +45,7 @@ messages:
 #        time: <от>-<до>
 #        name: <имя-игрока>
 #        message: <сообщение> (работает только при chat_message)
+#        message-contains: <сообщение> (работает только при chat_message)
 #        has:
 #          vault: <кол-во>
 #          playerpoints: <кол-во>

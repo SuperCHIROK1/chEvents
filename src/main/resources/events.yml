@@ -1,3 +1,13 @@
+#  ██████╗██╗  ██╗███████╗██╗   ██╗███████╗███╗   ██╗████████╗███████╗
+# ██╔════╝██║  ██║██╔════╝██║   ██║██╔════╝████╗  ██║╚══██╔══╝██╔════╝
+# ██║     ███████║█████╗  ██║   ██║█████╗  ██╔██╗ ██║   ██║   ███████╗
+# ██║     ██╔══██║██╔══╝  ╚██╗ ██╔╝██╔══╝  ██║╚██╗██║   ██║   ╚════██║
+# ╚██████╗██║  ██║███████╗ ╚████╔╝ ███████╗██║ ╚████║   ██║   ███████║
+#  ╚═════╝╚═╝  ╚═╝╚══════╝  ╚═══╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝
+
+# SuperCHIROK1 (t.me/bordyer)
+# Плагин поддерживает HEX и LEGACY цвета, а также PlaceholderAPI
+
 # ========================================
 #
 # "!" работает только при permission (!essentials.fly)
@@ -5,8 +15,8 @@
 # events:
 #   <название>:
 #      enabled: true
-#      event: <join, quit, move, death, damage, bed_enter, bed_leave, level_change, chat_message>
-#      actions-target: <EVENT_PLAYER, ONLINE_PLAYERS>
+#      listen: <join, quit, move, death, damage, bed_enter, bed_leave, level_change, chat_message>
+#      actions-target: <кому выполняется>
 #      cancel-event: <true/false> (работает только при выполнении условий *conditions*, т.е. actions будут работать)
 #      full-cancel-event: <true/false> (работает всегда и полностью отменяет ивент и действия)
 #      conditions:
@@ -16,6 +26,7 @@
 #        time: <от>-<до>
 #        name: <имя-игрока>
 #        message: <сообщение> (работает только при chat_message)
+#        message-contains: <сообщение> (работает только при chat_message)
 #        has:
 #          vault: <кол-во>
 #          playerpoints: <кол-во>
@@ -26,21 +37,55 @@
 #            output: <вывод>
 #      actions: <действия>
 #      deny-actions: <действия>
+#      always-actions: <действия> (Выполняются всегда и всегда выполняется первым)
+#
+# ========================================
+#
+# Возможные actions-target:
+# EVENT_PLAYER - игрок, который вызвал событие
+# ONLINE_PLAYERS - все онлайн игроки
+# ALL_EXCEPT - все, кроме инициатора
+# NAME_<имя игрока> - определенный игрок (по имени)
+# UUID_<uuid игрока> - определенный игрок (по uuid)
+# PERMISSION_<право> - игроки, у которых есть указанный permission
+# WORLD_<мир> - игроки, которые находятся в указанном мире
+#
+# ========================================
+#
+# Возможные listen:
+# join - Вход
+# quit - Выход
+# move - Движение
+# death - Смерть
+# damage - Урон
+# bed_enter - Кровать (ложиться)
+# bed_leave - Кровать (встать)
+# level_change - Изменение уровня опыта
+# chat_message - Сообщение в чате
+# block_break - Ломание блока
+# block_place - Ставка блока
+# player_kill_player - Убил игрока
+# player_death_by_player - Был убит игроком
+#
+# ========================================
+#
+# [!] Все действия и плейсхолдеры находятся ниже
+#
 # ========================================
 
 events:
   join:
     enabled: true
-    event: join
+    listen: join
     conditions:
-      permission: "!join.donate" # "!" работает только при permission (!essentials.fly)
+      permission: "!join.donate"
     actions:
       - "[title] &f&l |&8&k-&f &#FF3400д&#FF3900ᴏ&#FF3E00б&#FF4200ᴘ&#FF4700ᴏ &#FF5100п&#FF5600ᴏ&#FF5A00ж&#FF5F00ᴀ&#FF6400л&#FF6900ᴏ&#FF6E00ʙ&#FF7200ᴀ&#FF7700ᴛ&#FF7C00ь &8&k-&f|10|40|10"
       - '[broadcast] &#ff4000&l[+] &7Игрок &f%name% &7зашел!'
       - '[sound] entity.wither.spawn|1|1'
   join_donator:
     enabled: true
-    event: join
+    listen: join
     conditions:
       permission: join.donate
     actions:
@@ -49,17 +94,17 @@ events:
       - '[sound] entity.wither.spawn|1|1'
   quit:
     enabled: true
-    event: quit
+    listen: quit
     actions:
       - '[broadcast] &c&l[-] &7Игрок &f%name% &7вышел'
   death:
     enabled: true
-    event: death
+    listen: death
     actions:
       - '[broadcast] &#ff4000&l[☠] &7Игрок &f%name% &7умер'
   bed-leave:
     enabled: true
-    event: bed_leave
+    listen: bed_leave
     conditions:
       chance: 0.25
     actions:
@@ -74,19 +119,19 @@ events:
 
   bed-enter:
     enabled: true
-    event: bed_enter
+    listen: bed_enter
     actions:
       - '[broadcast] &8* &7%name% лег на кровать'
   damage:
     enabled: true
-    event: damage
+    listen: damage
     actions:
       - '[actionbar] &fЗдоровье: &c%health%'
       - '[velocity] 0|0.5|0'
   anti-poproshaika:
     enabled: true
     cancel-event: true
-    event: chat_message
+    listen: chat_message
     conditions:
       message: "дай ресов"
     actions:
@@ -94,7 +139,7 @@ events:
       - "[sound] block.note_block.didgeridoo|10|1"
   chat-sound:
     enabled: false
-    event: chat_message
+    listen: chat_message
     actions-target: ONLINE_PLAYERS
     actions:
       - "[sound] entity.item.pickup|10|0.2"
@@ -128,6 +173,15 @@ events:
 # [vault_take] <кол-во>
 # [playerp_give] <кол-во>
 # [playerp_take] <кол-во>
+# [gamemode] <значение>
+# [heal]
+# [feed]
+# [sethealth] <значение>
+# [setfood] <значение>
+# [xp_give] <значение>
+# [xp_take] <значение>
+# [level_give] <значение>
+# [level_take] <значение>
 
 # ========== Плейсхолдеры: ==========
 # %name% - Имя игрока
